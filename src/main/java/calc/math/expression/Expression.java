@@ -43,6 +43,24 @@ InvalidCharacterInExpression(char ch)
 }
 
 /**
+ * The InvalidMathOperator class implements an invalid math operator error in expression. This class
+ * inherits from Exception.
+ *
+ * @since 0.1
+ */
+class InvalidMathOperator extends Exception
+{
+/**
+ * The InvalidMathOperator class constructor.
+ *
+ * @param operator an invalid operator
+ * @since 0.1
+ */
+public
+InvalidMathOperator(String operator) { super("Invalid math operator '" + operator + "'."); }
+}
+
+/**
  * The Expression class. Gets input expression as a String type. Parses this expression and
  * calculates result of a parsed expression.
  *
@@ -75,6 +93,23 @@ class NextNumberObject
 	{
 		Index = index;
 		Number = number;
+	}
+}
+
+/**
+ * The MathOperatorObject class. Stores a result from method getOperator.
+ */
+private final static
+class MathOperatorObject
+{
+	public int Index; //! Index
+	public String Operator; //! Operator
+
+	public
+	MathOperatorObject(int index, String operator)
+	{
+		Index = index;
+		Operator = operator;
 	}
 }
 
@@ -136,7 +171,8 @@ String checkParenthesis(String source) throws Exception
  * while parsing this expression.
  */
 private static
-double calculateSubExpression(String source) throws InvalidCharacterInExpression
+double calculateSubExpression(String source) throws InvalidCharacterInExpression,
+																										InvalidMathOperator
 {
 	int index = 0; // current index in expression
 	double result;
@@ -153,9 +189,14 @@ double calculateSubExpression(String source) throws InvalidCharacterInExpression
 	while(index < source.length()) {
 		double currentValue;
 		//! gets next character
-		char operator = source.charAt(index);
+		String operator;
 		{
-			//!
+			MathOperatorObject mathOperatorObj = getOperator(source, index);
+			index = mathOperatorObj.Index;
+			operator = mathOperatorObj.Operator;
+		}
+		{
+			//! increment index
 			NextNumberObject nextNumberObj = getNextNumber(source, index + 1);
 			index = nextNumberObj.Index;
 			//! parses a second number
@@ -169,7 +210,12 @@ double calculateSubExpression(String source) throws InvalidCharacterInExpression
 		 * */
 		int nextIndex = index;
 		while(nextIndex < source.length()) {
-			char nextOperator = source.charAt(nextIndex);
+			String nextOperator;
+			{
+				MathOperatorObject mathOperatorObj = getOperator(source, nextIndex);
+				nextIndex = mathOperatorObj.Index;
+				nextOperator = mathOperatorObj.Operator;
+			}
 			if(getOperatorPriority(nextOperator) == OperatorPriority.Low) {
 				//! if priority os Low, break this loop and calculate the current value.
 				break;
@@ -195,45 +241,52 @@ double calculateSubExpression(String source) throws InvalidCharacterInExpression
  *
  * @param a the first value.
  * @param b the second value.
- * @param operator operator.
+ * @param operator a math operator.
  * @return result of applying this operator to two values.
- * @throws InvalidCharacterInExpression if operator is invalid.
+ * @throws InvalidMathOperator if operator is invalid.
  */
 private static
-double applyOperator(double a, double b, char operator) throws InvalidCharacterInExpression
+double applyOperator(double a, double b, String operator) throws InvalidMathOperator
 {
 	//! checks an operator
 	switch(operator) {
-	case '+':
+	case "+":
 		a += b;
 		break;
-	case '-':
+	case "-":
 		a -= b;
 		break;
-	case '/':
+	case "/":
 		a /= b;
 		break;
-	case '*':
+	case "*":
 		a *= b;
 		break;
+	case "%":
+		a %= b;
+		break;
+	case "^":
+		a = Math.pow(a, b);
+		break;
 	default:
-		// todo: other operators (sqrt, pow, etc...)
-		throw new InvalidCharacterInExpression(operator);
+		// todo: other operators (sqrt, etc...)
+		throw new InvalidMathOperator(operator);
 	}
 	return a;
 }
 
 /**
- * Gets the next number. Modifies values in the references in parameters.
+ * Gets the next number.
  *
  * @param source an expression.
  * @param index current index.
+ * @return NextNumberObject, which contains the new index and the next number.
  * @throws InvalidCharacterInExpression if not numeric character is found while parsing this
  * expression.
  */
 private static
 NextNumberObject getNextNumber(
-		String source, Integer index) throws InvalidCharacterInExpression
+		String source, int index) throws InvalidCharacterInExpression
 {
 	//! a sign before number
 	String sign = "";
@@ -266,20 +319,47 @@ NextNumberObject getNextNumber(
 }
 
 /**
+ * Gets the math operator after index.
+ *
+ * @param source an expression
+ * @param index current index
+ * @return MathOperatorObject object, which contains the new index and a math operator.
+ */
+private static
+MathOperatorObject getOperator(String source, int index)
+{
+	StringBuilder builderOperator = new StringBuilder();
+	char nextChar = source.charAt(index); //Character.MIN_VALUE;
+	//! todo: for sqrt and limits operator
+	//!	while(index < source.length() && Character.isAlphabetic((nextChar = source.charAt(index)))) {
+	//!		builderOperator.append(nextChar);
+	//!		++index;
+	//!	}
+
+	if(builderOperator.length() == 0 && nextChar != Character.MIN_VALUE) {
+		builderOperator.append(nextChar);
+	}
+
+	return new MathOperatorObject(index, builderOperator.toString());
+}
+
+/**
  * Check operator priority.
  *
  * @param operator operator.
  * @return operator priority.
  */
 private static
-OperatorPriority getOperatorPriority(char operator)
+OperatorPriority getOperatorPriority(String operator)
 {
 	switch(operator) {
-	case '*':
-	case '/':
+	case "*":
+	case "/":
+	case "^":
+	case "%":
 		return OperatorPriority.High;
-	case '+':
-	case '-':
+	case "+":
+	case "-":
 		// see return statement
 	}
 	return OperatorPriority.Low;

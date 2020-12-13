@@ -37,6 +37,8 @@ void testSimpleExpressionsWithSimpleOperators()
 		assertEquals("Math expression №8", 0, Expression.calculate(""), EPSILON);
 		assertEquals("Math expression with fractional number №9", 74.78358619, // see EPSILON
 								 Expression.calculate("(45.65 * 2.9) / 2.1 + 7.74321 - 1.0001 + 5"), EPSILON);
+		assertEquals("Math expression №10", 16, Expression.calculate("2 ^ 4"), EPSILON);
+		assertEquals("Math expression №11", 1, Expression.calculate("5 % 4"), EPSILON);
 	} catch(Exception e) {
 		fail("Handled exception: " + e.toString());
 	}
@@ -74,8 +76,7 @@ void testThrowInvalidCharacterInExpression()
 	try {
 		Expression.calculate("2 / 2 $ 3"); // invalid operator
 	} catch(Exception calcError) {
-		assertTrue("Throw InvalidCharacterInExpression",
-							 calcError instanceof InvalidCharacterInExpression);
+		assertTrue("Throw InvalidMathOperator", calcError instanceof InvalidMathOperator);
 	}
 }
 
