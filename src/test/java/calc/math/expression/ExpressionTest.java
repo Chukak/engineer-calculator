@@ -39,6 +39,9 @@ void testSimpleExpressionsWithSimpleOperators()
 								 Expression.calculate("(45.65 * 2.9) / 2.1 + 7.74321 - 1.0001 + 5"), EPSILON);
 		assertEquals("Math expression №10", 16, Expression.calculate("2 ^ 4"), EPSILON);
 		assertEquals("Math expression №11", 1, Expression.calculate("5 % 4"), EPSILON);
+		assertEquals("Math expression №12 with sqrt", 2, Expression.calculate("sqrt[2 + 2]"), EPSILON);
+		assertEquals("Math expression №13 with sqrt", 5,
+								 Expression.calculate("sqrt[(6 + 2 + 3) + 5 + 8 - ((1 + 2) + 6) + 10]"), EPSILON);
 	} catch(Exception e) {
 		fail("Handled exception: " + e.toString());
 	}
@@ -58,6 +61,8 @@ void testHardExpressionsWithSimpleOperators()
 		assertEquals("Hard math expression №2", -94, Expression.calculate(
 				"(-128 / 2 + (2 - (4 + (8 + (-1 + (-3 * 2) / (-1 + 1 * (5 - 15) / (5125 / 1025) * 2 + (-128) - (1 * (-1) - 1 ) + 128) - 64) / (-1) * -1) + (-5 + 10 - 10 + 18) + (1  +2 + 3 + 4 - 8) - (-64)) + 2 * (-4) / 2))"),
 								 EPSILON);
+		assertEquals("Hard math expression №3 with sqrt", 122, Expression
+				.calculate("127 - sqrt[0 + sqrt[(24 * 25 + 5 * 8) / 8 + 1] + sqrt[sqrt[65536]]]"), EPSILON);
 	} catch(Exception e) {
 		fail("Handled exception: " + e.toString());
 	}
@@ -75,6 +80,11 @@ void testThrowInvalidCharacterInExpression()
 	}
 	try {
 		Expression.calculate("2 / 2 $ 3"); // invalid operator
+	} catch(Exception calcError) {
+		assertTrue("Throw InvalidMathOperator", calcError instanceof InvalidMathOperator);
+	}
+	try {
+		Expression.calculate("sert[4]"); // invalid operator
 	} catch(Exception calcError) {
 		assertTrue("Throw InvalidMathOperator", calcError instanceof InvalidMathOperator);
 	}
@@ -96,6 +106,11 @@ void testThrowMissedParenthesis()
 	}
 	try {
 		Expression.calculate("(2 + 2 * (1 + (1 + 2 + 3))");
+	} catch(Exception calcError) {
+		assertTrue("Throw MissedParenthesis", calcError instanceof MissedParenthesis);
+	}
+	try {
+		Expression.calculate("sqrt[9 * 9)");
 	} catch(Exception calcError) {
 		assertTrue("Throw MissedParenthesis", calcError instanceof MissedParenthesis);
 	}

@@ -123,7 +123,8 @@ class MathOperatorObject
 public static
 double calculate(String expression) throws Exception
 {
-	return calculateSubExpression(checkParenthesis(expression.replaceAll("\\s", "")));
+	return calculateSubExpression(
+			checkParenthesis(checkMathFunctions(expression.replaceAll("\\s", ""))));
 }
 
 /**
@@ -329,12 +330,7 @@ private static
 MathOperatorObject getOperator(String source, int index)
 {
 	StringBuilder builderOperator = new StringBuilder();
-	char nextChar = source.charAt(index); //Character.MIN_VALUE;
-	//! todo: for sqrt and limits operator
-	//!	while(index < source.length() && Character.isAlphabetic((nextChar = source.charAt(index)))) {
-	//!		builderOperator.append(nextChar);
-	//!		++index;
-	//!	}
+	char nextChar = source.charAt(index);
 
 	if(builderOperator.length() == 0 && nextChar != Character.MIN_VALUE) {
 		builderOperator.append(nextChar);
@@ -363,5 +359,72 @@ OperatorPriority getOperatorPriority(String operator)
 		// see return statement
 	}
 	return OperatorPriority.Low;
+}
+
+/**
+ * Searches parenthesis ('[]') for any math functions and parses substring within those parenthesis
+ * and applies a math function to the parsed substring.
+ *
+ * @param source a math expression.
+ * @return an expression without any math functions.
+ * @throws MissedParenthesis if a closed parenthesis not found in this expression.
+ * @throws Exception if a another error occurred.
+ */
+private static
+String checkMathFunctions(String source) throws Exception
+{
+	int startFunctionIndex, endFunctionIndex;
+	//! looking for the closed parenthesis, only '['
+	while((endFunctionIndex = source.indexOf(']')) != -1) {
+		if((startFunctionIndex = source.lastIndexOf('[', endFunctionIndex)) == -1) {
+			throw new MissedParenthesis(source);
+		}
+
+		int cachedIndex = startFunctionIndex; // store index
+		StringBuilder func = new StringBuilder();
+		for(int i = cachedIndex - 1; // from open parenthesis
+				i >= 0; // to the beginning of the string
+				--i, --startFunctionIndex // decrement index, because we need skip math function when concatenate expression
+		) {
+			char ch = source.charAt(i);
+			if(Character.isAlphabetic(ch)) {
+				func.insert(0, ch);
+			} else { break; }
+		}
+
+		String subExpression = source.substring(cachedIndex + 1, endFunctionIndex);
+		double result =
+				applyMathFunction(func.toString(), calculateSubExpression(checkParenthesis(subExpression)));
+		source =
+				source.substring(0, startFunctionIndex) + result + source.substring(endFunctionIndex + 1);
+	}
+
+	if(source.indexOf('[') != -1) {
+		throw new MissedParenthesis(source);
+	}
+
+	return source;
+}
+
+/**
+ * Applies a math functions to the passed value.
+ *
+ * @param mathFunction a math function.
+ * @param value the passed value.
+ * @return result of applying this math functions to the passed value.
+ * @throws InvalidMathOperator if a math functions is invalid/
+ */
+private static
+double applyMathFunction(String mathFunction, double value) throws InvalidMathOperator
+{
+	double result;
+	switch(mathFunction) {
+	case "sqrt":
+		result = Math.sqrt(value);
+		break;
+	default:
+		throw new InvalidMathOperator(mathFunction);
+	}
+	return result;
 }
 }
