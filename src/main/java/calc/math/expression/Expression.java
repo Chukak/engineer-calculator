@@ -392,9 +392,20 @@ String checkMathFunctions(String source) throws Exception
 			} else { break; }
 		}
 
-		String subExpression = source.substring(cachedIndex + 1, endFunctionIndex);
+		String funcParams = "";
+		int startParamsFunctionIndex; // index of the first ',', the first parameter
+		if((startParamsFunctionIndex = source.indexOf(',', startFunctionIndex)) != -1) {
+			funcParams = source.substring(startParamsFunctionIndex + 1, endFunctionIndex);
+		} else {
+			startParamsFunctionIndex = endFunctionIndex; // no parameters
+		}
+
+		// get only expression without parameters
+		String subExpression = source.substring(cachedIndex + 1, startParamsFunctionIndex);
+
 		double result =
-				applyMathFunction(func.toString(), calculateSubExpression(checkParenthesis(subExpression)));
+				applyMathFunction(func.toString(), calculateSubExpression(checkParenthesis(subExpression)),
+													funcParams);
 		source =
 				source.substring(0, startFunctionIndex) + result + source.substring(endFunctionIndex + 1);
 	}
@@ -411,16 +422,26 @@ String checkMathFunctions(String source) throws Exception
  *
  * @param mathFunction a math function.
  * @param value the passed value.
+ * @param funcParam parameters fot this math function
  * @return result of applying this math functions to the passed value.
  * @throws InvalidMathOperator if a math functions is invalid/
  */
 private static
-double applyMathFunction(String mathFunction, double value) throws InvalidMathOperator
+double applyMathFunction(String mathFunction, double value, String funcParam) throws
+																																							InvalidMathOperator
 {
 	double result;
 	switch(mathFunction) {
 	case "sqrt":
-		result = Math.sqrt(value);
+		double nth = 2.0;
+		if(!funcParam.isEmpty()) {
+			String[] params = funcParam.split(",", -1);
+			if(params.length >= 1) {
+				nth = Double.parseDouble(params[0]);
+			}
+		}
+
+		result = Math.pow(value, 1.0 / nth); // sqrt = v ^ (1 / n), right?
 		break;
 	case "sin":
 		result = Math.sin(Math.toRadians(value));
@@ -436,6 +457,17 @@ double applyMathFunction(String mathFunction, double value) throws InvalidMathOp
 		break;
 	case "ln":
 		result = Math.log(value);
+		break;
+	case "log":
+		double logBase = 10.0; // base 10 by default
+		if(!funcParam.isEmpty()) {
+			String[] params = funcParam.split(",", -1);
+			if(params.length >= 1) {
+				logBase = Double.parseDouble(params[0]);
+			}
+		}
+
+		result = Math.log(value) / Math.log(logBase);
 		break;
 	default:
 		throw new InvalidMathOperator(mathFunction);

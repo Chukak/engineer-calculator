@@ -51,6 +51,9 @@ void testSimpleExpressionsWithSimpleOperators()
 								 EPSILON);
 		assertEquals("Math expression №18 with ln", 4.60517018, Expression.calculate("ln[100]"),
 								 EPSILON);
+		assertEquals("Math expression №19 with sqrt3", 3, Expression.calculate("sqrt[27, 3]"), EPSILON);
+		assertEquals("Math expression №20 with log2", 3, Expression.calculate("log[(2 * 4), 2]"),
+								 EPSILON);
 	} catch(Exception e) {
 		fail("Handled exception: " + e.toString());
 	}
