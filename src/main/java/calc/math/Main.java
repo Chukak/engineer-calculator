@@ -1,6 +1,21 @@
 package calc.math;
 
-public class Main
+import calc.math.expression.Expression;
+
+import java.util.Scanner;
+
+public
+class Main
 {
-  public static void main(String[] args) { System.out.println(""); }
+public static
+void main(String[] args)
+{
+	System.out.println("Math expression:");
+	Scanner cin = new Scanner(System.in);
+	try {
+		System.out.println("Result: " + Expression.calculate(cin.nextLine()));
+	} catch(Exception e) {
+		System.out.println("Handler exception: " + e.toString());
+	}
+}
 }
