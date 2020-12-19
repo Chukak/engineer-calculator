@@ -422,6 +422,21 @@ double applyMathFunction(String mathFunction, double value) throws InvalidMathOp
 	case "sqrt":
 		result = Math.sqrt(value);
 		break;
+	case "sin":
+		result = Math.sin(Math.toRadians(value));
+		break;
+	case "cos":
+		result = Math.cos(Math.toRadians(value));
+		break;
+	case "tg":
+		result = Math.tan(Math.toRadians(value));
+		break;
+	case "ctg":
+		result = 1.0 / Math.tan(Math.toRadians(value));
+		break;
+	case "ln":
+		result = Math.log(value);
+		break;
 	default:
 		throw new InvalidMathOperator(mathFunction);
 	}

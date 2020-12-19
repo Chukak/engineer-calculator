@@ -42,6 +42,15 @@ void testSimpleExpressionsWithSimpleOperators()
 		assertEquals("Math expression №12 with sqrt", 2, Expression.calculate("sqrt[2 + 2]"), EPSILON);
 		assertEquals("Math expression №13 with sqrt", 5,
 								 Expression.calculate("sqrt[(6 + 2 + 3) + 5 + 8 - ((1 + 2) + 6) + 10]"), EPSILON);
+		assertEquals("Math expression №14 with sin", 0, Expression.calculate("sin[0]"), EPSILON);
+		assertEquals("Math expression №15 with cos", 9, Expression.calculate("8 + cos[0] * 1"),
+								 EPSILON);
+		assertEquals("Math expression №16 with tg", 1.03553031, Expression.calculate("tg[226]"),
+								 EPSILON);
+		assertEquals("Math expression №17 with ctg", 0.67450851, Expression.calculate("ctg[56]"),
+								 EPSILON);
+		assertEquals("Math expression №18 with ln", 4.60517018, Expression.calculate("ln[100]"),
+								 EPSILON);
 	} catch(Exception e) {
 		fail("Handled exception: " + e.toString());
 	}
