@@ -1,5 +1,8 @@
 package calc.math.expression;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The MissedParenthesis class implements the missing parenthesis error. This class inherits from
  * Exception.
@@ -79,6 +82,16 @@ enum OperatorPriority
 	Low //! (+, -, etc...)
 }
 
+
+public static final double PI = Math.PI; //! PI, math constant
+public static final double E = Math.E; //! E, math constant
+
+private static final HashMap<String, Double> CONSTANTS = new HashMap<>()
+{{
+	put("PI", PI);
+	put("e", E);
+}};
+
 /**
  * The NextNumberObject class. Stores a result from method getNextNumber.
  */
@@ -123,8 +136,8 @@ class MathOperatorObject
 public static
 double calculate(String expression) throws Exception
 {
-	return calculateSubExpression(
-			checkParenthesis(checkMathFunctions(expression.replaceAll("\\s", ""))));
+	expression = checkMathConstants(expression.replaceAll("\\s", ""));
+	return calculateSubExpression(checkParenthesis(checkMathFunctions(expression)));
 }
 
 /**
@@ -473,5 +486,29 @@ double applyMathFunction(String mathFunction, double value, String funcParam) th
 		throw new InvalidMathOperator(mathFunction);
 	}
 	return result;
+}
+
+/**
+ * Searches math constants and replace them.
+ *
+ * @param source a math expression
+ * @return an expression with values of math constants.
+ */
+private static
+String checkMathConstants(String source)
+{
+	for(Map.Entry<String, Double> entry : CONSTANTS.entrySet()) {
+		String key = entry.getKey();
+		Double value = entry.getValue();
+		// because on method applyMathFunction we are converting value to radians.
+		if(key.equals("PI")) {
+			value = Math.toDegrees(value);
+		}
+
+		// if there is a math func, which contains any character similar a math constant, do not replace it!
+		String regex = "(?<![a-zA-Z])" + key + "(?![a-zA-Z])";
+		source = source.replaceAll(regex, value.toString());
+	}
+	return source;
 }
 }

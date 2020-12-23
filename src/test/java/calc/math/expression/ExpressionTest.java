@@ -54,6 +54,10 @@ void testSimpleExpressionsWithSimpleOperators()
 		assertEquals("Math expression №19 with sqrt3", 3, Expression.calculate("sqrt[27, 3]"), EPSILON);
 		assertEquals("Math expression №20 with log2", 3, Expression.calculate("log[(2 * 4), 2]"),
 								 EPSILON);
+		assertEquals("Math expression №21 with math constants", 1, Expression.calculate("sin[PI/2]"),
+								 EPSILON);
+		assertEquals("Math expression №22 with math constants", 1.64872127,
+								 Expression.calculate("sqrt[e^1]"), EPSILON);
 	} catch(Exception e) {
 		fail("Handled exception: " + e.toString());
 	}
@@ -99,6 +103,12 @@ void testThrowInvalidCharacterInExpression()
 		Expression.calculate("sert[4]"); // invalid operator
 	} catch(Exception calcError) {
 		assertTrue("Throw InvalidMathOperator", calcError instanceof InvalidMathOperator);
+	}
+	// do not replace math constant, if esin - math function (suppose)
+	try {
+		Expression.calculate("sqrt[esin ^ 2]");
+	} catch(Exception calcError) {
+		assertTrue("Throw InvalidMathOperator", calcError instanceof InvalidCharacterInExpression);
 	}
 }
 
