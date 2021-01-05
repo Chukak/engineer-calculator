@@ -308,20 +308,43 @@ NextNumberObject getNextNumber(
 {
 
 	StringBuilder numberBuilder = new StringBuilder();
-	boolean hasAlphabetic = false;
+	boolean hasAlphabetic = false, hasSign = false, checkSign = false;
 
 	while(index < source.length()) {
 		char ch = source.charAt(index);
 		//! integer ot fractional number
 		if(Character.isDigit(ch) || ch == '.') {
 			numberBuilder.append(ch);
-		} else if(ch == '-' && index + 1 < source.length() && numberBuilder.length() == 0) {
+		} else if(ch == '-' // check minus
+				&& index + 1 < source.length() // check next number is exists
+				&& (numberBuilder.length() == 0 // sign before number
+				|| checkSign // sign before exponent value
+		)) {
 			//! a sign before number
-			numberBuilder.setLength(0);
+			if(!checkSign) {
+				// if is a sign before value, reset length
+				numberBuilder.setLength(0);
+			}
 			numberBuilder.append(ch);
+			hasSign = true;
+			checkSign = false;
 		} else if(Character.isAlphabetic(ch)) {
-			numberBuilder.append(ch);
-			hasAlphabetic = true;
+			if(numberBuilder.length() == 0 // no numbers before
+					|| (hasSign && numberBuilder.length() == 1) // or has a sign before, like '-Infinity'
+					|| hasAlphabetic // or has alphabetic characters
+			) {
+				numberBuilder.append(ch);
+				hasAlphabetic = true;
+			} else {
+				// check numbers like '7.000000579182597E-9'
+				// todo: parsing double with exponent
+				if(numberBuilder.indexOf(".") == -1 || ch != 'E') {
+					throw new InvalidStringInExpression(numberBuilder.toString());
+				} else {
+					numberBuilder.append(ch);
+					checkSign = true;
+				}
+			}
 		} else { break; }
 
 		++index; // increment index
