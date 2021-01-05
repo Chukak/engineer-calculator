@@ -1,5 +1,6 @@
 package calc.math.expression;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,23 +26,23 @@ MissedParenthesis(String expression)
 }
 
 /**
- * The InvalidCharacterInExpression class implements an invalid character error in expression. This
- * class inherits from Exception.
+ * The InvalidStringInExpression class implements an invalid string (variable name, infinity, etc)
+ * error in expression. This class inherits from Exception.
  *
  * @since 0.1
  */
-class InvalidCharacterInExpression extends Exception
+class InvalidStringInExpression extends Exception
 {
 /**
- * The InvalidCharacterInExpression class constructor.
+ * The InvalidStringInExpression class constructor.
  *
- * @param ch an invalid character.
+ * @param s an invalid string.
  * @since 0.1
  */
 public
-InvalidCharacterInExpression(char ch)
+InvalidStringInExpression(String s)
 {
-	super("Character '" + ch + "' is not numeric type.");
+	super("String '" + s + "' is not numeric type or not allowed.");
 }
 }
 
@@ -91,6 +92,10 @@ private static final HashMap<String, Double> CONSTANTS = new HashMap<>()
 	put("PI", PI);
 	put("e", E);
 }};
+
+private static final String[] ALLOWED_STRINGS = { "Infinity", //! Positive infinity
+																									"-Infinity" //! Negative infinity
+};
 
 /**
  * The NextNumberObject class. Stores a result from method getNextNumber.
@@ -181,12 +186,11 @@ String checkParenthesis(String source) throws Exception
  *
  * @param source an expression math.
  * @return result of this expression.
- * @throws InvalidCharacterInExpression if any not numeric character or invalid operator is found
- * while parsing this expression.
+ * @throws InvalidStringInExpression if any not allowed string or invalid operator is found while
+ * parsing this expression.
  */
 private static
-double calculateSubExpression(String source) throws InvalidCharacterInExpression,
-																										InvalidMathOperator
+double calculateSubExpression(String source) throws InvalidStringInExpression, InvalidMathOperator
 {
 	int index = 0; // current index in expression
 	double result;
@@ -295,33 +299,38 @@ double applyOperator(double a, double b, String operator) throws InvalidMathOper
  * @param source an expression.
  * @param index current index.
  * @return NextNumberObject, which contains the new index and the next number.
- * @throws InvalidCharacterInExpression if not numeric character is found while parsing this
+ * @throws InvalidStringInExpression if not numeric character is found while parsing this
  * expression.
  */
 private static
 NextNumberObject getNextNumber(
-		String source, int index) throws InvalidCharacterInExpression
+		String source, int index) throws InvalidStringInExpression
 {
-	//! a sign before number
-	String sign = "";
+
 	StringBuilder numberBuilder = new StringBuilder();
+	boolean hasAlphabetic = false;
 
 	while(index < source.length()) {
 		char ch = source.charAt(index);
 		//! integer ot fractional number
 		if(Character.isDigit(ch) || ch == '.') {
-			numberBuilder.append(sign);
-			sign = "";
 			numberBuilder.append(ch);
 		} else if(ch == '-' && index + 1 < source.length() && numberBuilder.length() == 0) {
-			//! stores sign
+			//! a sign before number
 			numberBuilder.setLength(0);
-			sign = String.valueOf(ch);
+			numberBuilder.append(ch);
 		} else if(Character.isAlphabetic(ch)) {
-			throw new InvalidCharacterInExpression(ch);
+			numberBuilder.append(ch);
+			hasAlphabetic = true;
 		} else { break; }
 
 		++index; // increment index
+	}
+
+	// check if string is allowed in expression
+	if(hasAlphabetic && Arrays.stream(ALLOWED_STRINGS)
+														.noneMatch(x -> x.equals(numberBuilder.toString()))) {
+		throw new InvalidStringInExpression(numberBuilder.toString());
 	}
 
 	//! avoid a java.Exception when Double.parseDouble("")
@@ -444,40 +453,50 @@ double applyMathFunction(String mathFunction, double value, String funcParam) th
 																																							InvalidMathOperator
 {
 	double result;
+	String[] params = {};
+	if(!funcParam.isEmpty()) {
+		params = funcParam.split(",", -1);
+	}
+
+	switch(mathFunction) {
+	case "sin":
+	case "cos":
+	case "tg":
+	case "ctg":
+		// replace degree to radians
+		if(params.length >= 1 && params[0].equals("deg") /* degrees */) {
+			value = Math.toRadians(value);
+		}
+	}
+
 	switch(mathFunction) {
 	case "sqrt":
 		double nth = 2.0;
-		if(!funcParam.isEmpty()) {
-			String[] params = funcParam.split(",", -1);
-			if(params.length >= 1) {
-				nth = Double.parseDouble(params[0]);
-			}
+		if(params.length >= 1) {
+			nth = Double.parseDouble(params[0]);
 		}
 
 		result = Math.pow(value, 1.0 / nth); // sqrt = v ^ (1 / n), right?
 		break;
 	case "sin":
-		result = Math.sin(Math.toRadians(value));
+		result = Math.sin(value);
 		break;
 	case "cos":
-		result = Math.cos(Math.toRadians(value));
+		result = Math.cos(value);
 		break;
 	case "tg":
-		result = Math.tan(Math.toRadians(value));
+		result = Math.tan(value);
 		break;
 	case "ctg":
-		result = 1.0 / Math.tan(Math.toRadians(value));
+		result = 1.0 / Math.tan(value);
 		break;
 	case "ln":
 		result = Math.log(value);
 		break;
 	case "log":
 		double logBase = 10.0; // base 10 by default
-		if(!funcParam.isEmpty()) {
-			String[] params = funcParam.split(",", -1);
-			if(params.length >= 1) {
-				logBase = Double.parseDouble(params[0]);
-			}
+		if(params.length >= 1) {
+			logBase = Double.parseDouble(params[0]);
 		}
 
 		result = Math.log(value) / Math.log(logBase);
@@ -500,11 +519,6 @@ String checkMathConstants(String source)
 	for(Map.Entry<String, Double> entry : CONSTANTS.entrySet()) {
 		String key = entry.getKey();
 		Double value = entry.getValue();
-		// because on method applyMathFunction we are converting value to radians.
-		if(key.equals("PI")) {
-			value = Math.toDegrees(value);
-		}
-
 		// if there is a math func, which contains any character similar a math constant, do not replace it!
 		String regex = "(?<![a-zA-Z])" + key + "(?![a-zA-Z])";
 		source = source.replaceAll(regex, value.toString());

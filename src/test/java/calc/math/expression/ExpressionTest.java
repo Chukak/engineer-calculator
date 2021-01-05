@@ -45,9 +45,9 @@ void testSimpleExpressionsWithSimpleOperators()
 		assertEquals("Math expression №14 with sin", 0, Expression.calculate("sin[0]"), EPSILON);
 		assertEquals("Math expression №15 with cos", 9, Expression.calculate("8 + cos[0] * 1"),
 								 EPSILON);
-		assertEquals("Math expression №16 with tg", 1.03553031, Expression.calculate("tg[226]"),
+		assertEquals("Math expression №16 with tg", -0.19716805, Expression.calculate("tg[226]"),
 								 EPSILON);
-		assertEquals("Math expression №17 with ctg", 0.67450851, Expression.calculate("ctg[56]"),
+		assertEquals("Math expression №17 with ctg", -1.63592842, Expression.calculate("ctg[56]"),
 								 EPSILON);
 		assertEquals("Math expression №18 with ln", 4.60517018, Expression.calculate("ln[100]"),
 								 EPSILON);
@@ -58,6 +58,10 @@ void testSimpleExpressionsWithSimpleOperators()
 								 EPSILON);
 		assertEquals("Math expression №22 with math constants", 1.64872127,
 								 Expression.calculate("sqrt[e^1]"), EPSILON);
+		assertEquals("Math expression №23 with negative infinity", Double.NEGATIVE_INFINITY,
+								 Expression.calculate("1 + -Infinity"), EPSILON);
+		assertEquals("Math expression №24 with degrees", 0.99984769,
+								 Expression.calculate("cos[1, deg]"), EPSILON);
 	} catch(Exception e) {
 		fail("Handled exception: " + e.toString());
 	}
@@ -91,8 +95,7 @@ void testThrowInvalidCharacterInExpression()
 	try {
 		Expression.calculate("2 / a");
 	} catch(Exception calcError) {
-		assertTrue("Throw InvalidCharacterInExpression",
-							 calcError instanceof InvalidCharacterInExpression);
+		assertTrue("Throw InvalidStringInExpression", calcError instanceof InvalidStringInExpression);
 	}
 	try {
 		Expression.calculate("2 / 2 $ 3"); // invalid operator
@@ -108,7 +111,7 @@ void testThrowInvalidCharacterInExpression()
 	try {
 		Expression.calculate("sqrt[esin ^ 2]");
 	} catch(Exception calcError) {
-		assertTrue("Throw InvalidMathOperator", calcError instanceof InvalidCharacterInExpression);
+		assertTrue("Throw InvalidStringInExpression", calcError instanceof InvalidStringInExpression);
 	}
 }
 
