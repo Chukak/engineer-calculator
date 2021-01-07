@@ -28,6 +28,9 @@ void testSimpleMathLimits()
 								 Limit.calculate("cos[var]", "var", 1, EPSILON_TO_COMPARE), EPSILON);
 		assertEquals("Simple math limit №4", -6.99999988, Limit
 				.calculate("(2 * (x ^ 2) - 3 * x - 5) / (x + 1)", "x", -1, EPSILON_TO_COMPARE), EPSILON);
+		assertEquals("Simple math limit №5", 0,
+								 Limit.calculate("1/x", "x", Double.POSITIVE_INFINITY, EPSILON_TO_COMPARE),
+								 EPSILON);
 	} catch(Exception e) {
 		fail("Handled exception: " + e.toString());
 	}
