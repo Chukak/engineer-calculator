@@ -15,7 +15,7 @@ void main(String[] args)
 	try {
 		System.out.println("Result: " + Expression.calculate(cin.nextLine()));
 	} catch(Exception e) {
-		System.out.println("Handler exception: " + e.toString());
+		System.out.println("Handled exception: " + e.toString());
 	}
 }
 }

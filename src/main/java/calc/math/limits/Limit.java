@@ -40,6 +40,7 @@ enum LimitType
  * @param source a math limit expression.
  * @param variableName variable name (x, n, etc).
  * @param approachTo the limit strives for.
+ * @param epsilon epsilon used for comparison two limits.
  * @return result of this expression.
  * @throws Exception if an error occurred while parsing this expression or 'Expression.calculate'
  * throws exception.
@@ -100,7 +101,7 @@ double getLimitFrom(
  *
  * @param limitFromBelow limit from below, not NaN.
  * @param limitFromAbove limit from above, not NaN.
- * @param epsilon epsilon.
+ * @param epsilon epsilon used for comparison two limits.
  * @return result of comparison two limits.
  */
 private static
