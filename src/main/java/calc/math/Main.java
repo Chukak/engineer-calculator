@@ -7,6 +7,9 @@ import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.Parent;
+import javafx.fxml.FXMLLoader;
 
 public
 class Main extends Application
@@ -15,7 +18,9 @@ class Main extends Application
 public
 void start(Stage stage) throws Exception
 {
+	Parent root = FXMLLoader.load(getClass().getResource("/view/window.fxml"));
 	stage.setTitle("Engineering calculator");
+	stage.setScene(new Scene(root));
 	stage.show();
 }
 

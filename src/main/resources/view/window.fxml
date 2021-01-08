@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Separator?>
+
+<!-- Global layout -->
+<GridPane xmlns:fx="http://javafx.com/fxml"
+          fx:controller="calc.math.gui.controllers.MainSceneController"
+          styleClass="root">
+    <TextField fx:id="mathExpressionData" prefHeight="60"
+               GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <!-- Left pane -->
+    <HBox GridPane.rowIndex="1" GridPane.columnIndex="0">
+        <VBox>
+            <HBox>
+                <Button prefHeight="60" prefWidth="60" text="sin" onAction="#clickedButton"/>
+                <!-- '&#960;' - PI 'π' -->
+                <Button prefHeight="60" prefWidth="60" text="&#960;" onAction="#clickedButton"/>
+                <Button prefHeight="60" prefWidth="60" text="[" onAction="#clickedButton"/>
+            </HBox>
+            <HBox>
+                <Button prefHeight="60" prefWidth="60" text="cos" onAction="#clickedButton"/>
+                <!-- '&#8455;' - Euler 'ℇ' -->
+                <Button prefHeight="60" prefWidth="60" text="&#8455;" onAction="#clickedButton"/>
+                <Button prefHeight="60" prefWidth="60" text="]" onAction="#clickedButton"/>
+            </HBox>
+            <HBox>
+                <Button prefHeight="60" prefWidth="60" text="tg" onAction="#clickedButton"/>
+                <Button prefHeight="60" prefWidth="60" text="ln" onAction="#clickedButton"/>
+                <!-- '&#8734;' - Infinity '∞' -->
+                <Button prefHeight="60" prefWidth="60" text="&#8734;" onAction="#clickedButton"/>
+            </HBox>
+            <HBox>
+                <Button prefHeight="60" prefWidth="60" text="ctg" onAction="#clickedButton"/>
+                <Button prefHeight="60" prefWidth="60" text="log" onAction="#clickedButton"/>
+                <!-- '&#8730;' - sqrt '√' -->
+                <Button prefHeight="60" prefWidth="60" text="&#8730;" onAction="#clickedButton"/>
+            </HBox>
+            <HBox>
+                <Button prefHeight="60" prefWidth="180" disable="true"/>
+            </HBox>
+        </VBox>
+        <Separator/> <!-- Empty space -->
+        <!-- Right pane -->
+        <VBox>
+            <HBox>
+                <VBox>
+                    <HBox>
+                        <!-- '&#8592;' - backspace '←' -->
+                        <Button prefHeight="60" prefWidth="60" text="&#8592;" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="(" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text=")" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="^" onAction="#clickedButton"/>
+                    </HBox>
+                    <HBox>
+                        <Button prefHeight="60" prefWidth="60" text="7" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="8" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="9" onAction="#clickedButton"/>
+                        <!-- '&#247;' - division '÷' -->
+                        <Button prefHeight="60" prefWidth="60" text="&#247;" onAction="#clickedButton"/>
+                    </HBox>
+                    <HBox>
+                        <Button prefHeight="60" prefWidth="60" text="4" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="5" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="6" onAction="#clickedButton"/>
+                        <!-- '&#215;' - multiply '×' -->
+                        <Button prefHeight="60" prefWidth="60" text="&#215;" onAction="#clickedButton"/>
+                    </HBox>
+                    <HBox>
+                        <Button prefHeight="60" prefWidth="60" text="1" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="2" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="3" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="-" onAction="#clickedButton"/>
+                    </HBox>
+                    <HBox>
+                        <Button prefHeight="60" prefWidth="60" text="0" onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="." onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="," onAction="#clickedButton"/>
+                        <Button prefHeight="60" prefWidth="60" text="+" onAction="#clickedButton"/>
+                    </HBox>
+                </VBox>
+                <VBox>
+                    <Button prefHeight="60" prefWidth="60" text="AC" onAction="#clickedButton"/>
+                    <Button prefHeight="60" prefWidth="60" text="abs" disable="true"/>
+                    <Button prefHeight="60" prefWidth="60" text="mod" onAction="#clickedButton"/>
+                    <!-- '&#61;' - equals sign '=' -->
+                    <Button prefHeight="120" prefWidth="60" text="&#61;" onAction="#calculate"
+                            defaultButton="true"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </HBox>
+</GridPane>
