@@ -41,7 +41,10 @@
                 <Button prefHeight="60" prefWidth="60" text="&#8730;" onAction="#clickedButton"/>
             </HBox>
             <HBox>
-                <Button prefHeight="60" prefWidth="180" disable="true"/>
+                <Button prefHeight="60" prefWidth="60" text="Help" onAction="#showHelp"/>
+                <!-- '&#9776;' - menu '☰' -->
+                <Button prefHeight="60" prefWidth="60" text="&#9776;" onAction="#showMenu"/>
+                <Button prefHeight="60" prefWidth="60" disable="true"/>
             </HBox>
         </VBox>
         <Separator/> <!-- Empty space -->
