@@ -83,6 +83,10 @@ enum OperatorPriority
 	Low //! (+, -, etc...)
 }
 
+/**
+ * The infinity constant name.
+ */
+public static final String INF_CONSTANT_NAME = "Infinity";
 
 public static final double PI = Math.PI; //! PI, math constant
 public static final double E = Math.E; //! E, math constant
@@ -93,8 +97,8 @@ private static final HashMap<String, Double> CONSTANTS = new HashMap<>()
 	put("e", E);
 }};
 
-private static final String[] ALLOWED_STRINGS = { "Infinity", //! Positive infinity
-																									"-Infinity" //! Negative infinity
+private static final String[] ALLOWED_STRINGS = { INF_CONSTANT_NAME, //! Positive infinity
+																									"-" + INF_CONSTANT_NAME //! Negative infinity
 };
 
 /**
@@ -547,5 +551,18 @@ String checkMathConstants(String source)
 		source = source.replaceAll(regex, value.toString());
 	}
 	return source;
+}
+
+/**
+ * @param value value like Math.PI, Math.E, etc
+ * @return Returns a constant name by value. PI, Euler, etc.
+ */
+public static
+String getConstantName(Double value)
+{
+	for(Map.Entry<String, Double> entry : CONSTANTS.entrySet()) {
+		if(Double.compare(entry.getValue(), value) == 0) { return entry.getKey(); }
+	}
+	return "";
 }
 }

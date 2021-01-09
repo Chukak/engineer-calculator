@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.ScrollPane?>
+
+<!-- Menu layout  -->
+<GridPane xmlns:fx="http://javafx.com/fxml"
+          alignment="CENTER" prefWidth="180" prefHeight="180">
+    <ScrollPane prefHeight="160" prefWidth="180"
+                GridPane.rowIndex="0" GridPane.columnIndex="0">
+        <ListView fx:id="listMenu"/>
+    </ScrollPane>
+    <!-- controller will create inside MainSceneController -->
+    <Button prefHeight="40" prefWidth="180" text="Open"
+            GridPane.rowIndex="1" GridPane.columnIndex="0"
+            onAction="#processItem"/>
+</GridPane>
