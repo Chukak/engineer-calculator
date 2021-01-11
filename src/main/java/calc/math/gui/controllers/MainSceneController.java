@@ -1,6 +1,7 @@
 package calc.math.gui.controllers;
 
 import calc.math.expression.Expression;
+import calc.math.utils.Logging;
 
 import calc.math.limits.Limit;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +14,6 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,11 +24,6 @@ import java.util.regex.Pattern;
 public
 class MainSceneController
 {
-/**
- * The logger.
- */
-private static final Logger logger = Logger.getLogger(MainSceneController.class.getName());
-
 /**
  * The reference to TextField object in the main scene.
  */
@@ -77,7 +71,7 @@ MainSceneController()
 		loader.setController(menuController);
 		popupMenu.getContent().add(loader.load());
 	} catch(Exception e) {
-		logger.log(Level.INFO, "Handled exception: " + e.getMessage());
+		Logging.warning(this, "Handled exception: " + e.getMessage());
 		popupMenu = null;
 	}
 }
@@ -118,7 +112,7 @@ void calculate()
 			break;
 		}
 	} catch(Exception e) {
-		logger.log(Level.INFO, e.toString());
+		Logging.warning(this, "Handled exception: " + e.getMessage());
 	}
 }
 
@@ -137,11 +131,12 @@ void clickedButton(ActionEvent event)
 	try {
 		buttonText = ((Button)event.getSource()).getText();
 	} catch(ClassCastException e) {
-		logger.log(Level.INFO, "Cast error '" + event + " -> " + Button.class.getName() + ".");
-		logger.log(Level.INFO, e.toString());
+		Logging.warning(this,
+										"Error occurred while converting object from '"  // comment for ignore break line
+												+ event.getClass().getName() + "' to '" + Button.class.getName() + "': " + e
+												.getMessage());
 		return;
 	}
-	System.out.println(buttonText);
 
 	switch(buttonText) {
 	case "0":
@@ -292,7 +287,7 @@ void setOperation(OperationType operationType)
 			stage.setScene(new Scene(loader.load()));
 			stage.show();
 		} catch(Exception e) {
-			logger.log(Level.INFO, "Handled exception: " + e.getMessage());
+			Logging.warning(this, "Handled exception: " + e.getMessage());
 		}
 		break;
 	}

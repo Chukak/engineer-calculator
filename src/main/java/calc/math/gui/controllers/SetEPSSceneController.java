@@ -1,5 +1,7 @@
 package calc.math.gui.controllers;
 
+import calc.math.utils.Logging;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -49,7 +51,7 @@ void setEPS()
 		// todo: we really need change the main controller object
 		mainScene.Epsilon = Double.parseDouble(epsilonToCompareData.getText());
 	} catch(Exception e) {
-		// todo:
+		Logging.warning(this, "Handled exception: " + e.getMessage());
 	}
 }
 }
