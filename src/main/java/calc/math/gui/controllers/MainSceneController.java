@@ -1,6 +1,7 @@
 package calc.math.gui.controllers;
 
 import calc.math.expression.Expression;
+import calc.math.utils.GlobalSettings;
 import calc.math.utils.Logging;
 
 import calc.math.limits.Limit;
@@ -44,9 +45,6 @@ private Popup popupMenu = new Popup();
  * The current operation.
  */
 private OperationType currentOperation = OperationType.Calculator;
-
-// todo: global variables
-public double Epsilon = 0.00001;
 
 /**
  * Operation types
@@ -100,12 +98,12 @@ void calculate()
 				// remove unused words from text
 				text = text.substring(m.end());
 			}
-			mathExpressionData.setText(Double.toString(
-					Limit.calculate(text, variableName, Double.parseDouble(approachTo), Epsilon)));
+			mathExpressionData.setText(Double.toString(Limit.calculate(text, variableName,
+																																 Double.parseDouble(approachTo),
+																																 GlobalSettings.Limits.EPSILON_TO_COMPARE)));
 			break;
 		}
 		case SetEPS:
-			break;
 		default:
 			mathExpressionData
 					.setText(Double.toString(Expression.calculate(mathExpressionData.getText())));
@@ -267,7 +265,10 @@ void showMenu()
 public
 void setOperation(OperationType operationType)
 {
-	currentOperation = operationType;
+	// skip set epsilon operation
+	if(operationType != OperationType.SetEPS) {
+		currentOperation = operationType;
+	}
 
 	switch(operationType) {
 	case Limits: { // math limits calculating
@@ -281,10 +282,8 @@ void setOperation(OperationType operationType)
 	case SetEPS: { // just set epsilon for comparing (using in math limits calculating)
 		try {
 			Stage stage = new Stage();
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/setEPS.fxml"));
-			loader.setController(new SetEPSSceneController(this));
 			stage.setTitle("Set epsilon to compare");
-			stage.setScene(new Scene(loader.load()));
+			stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/setEPS.fxml"))));
 			stage.show();
 		} catch(Exception e) {
 			Logging.warning(this, "Handled exception: " + e.getMessage());

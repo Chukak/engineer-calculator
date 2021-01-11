@@ -1,6 +1,7 @@
 package calc.math.gui.controllers;
 
 import calc.math.utils.Logging;
+import calc.math.utils.GlobalSettings;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -18,26 +19,13 @@ class SetEPSSceneController
 @FXML
 private TextField epsilonToCompareData;
 
-private final MainSceneController mainScene;
-
-/**
- * Constructor.
- *
- * @param mainSceneObject The parent 'MainSceneController' object.
- */
-public
-SetEPSSceneController(MainSceneController mainSceneObject)
-{
-	mainScene = mainSceneObject;
-}
-
 /**
  * Initialize the current object.
  */
 public
 void initialize()
 {
-	epsilonToCompareData.setText(Double.toString(mainScene.Epsilon)); // todo: global variables
+	epsilonToCompareData.setText(Double.toString(GlobalSettings.Limits.EPSILON_TO_COMPARE));
 }
 
 /**
@@ -48,8 +36,7 @@ private
 void setEPS()
 {
 	try {
-		// todo: we really need change the main controller object
-		mainScene.Epsilon = Double.parseDouble(epsilonToCompareData.getText());
+		GlobalSettings.Limits.EPSILON_TO_COMPARE = Double.parseDouble(epsilonToCompareData.getText());
 	} catch(Exception e) {
 		Logging.warning(this, "Handled exception: " + e.getMessage());
 	}

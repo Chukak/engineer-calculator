@@ -9,14 +9,14 @@
 
 <GridPane xmlns:fx="http://javafx.com/fxml"
           alignment="CENTER"
-          prefWidth="280" prefHeight="120">
+          prefWidth="280" prefHeight="120"
+          fx:controller="calc.math.gui.controllers.SetEPSSceneController">
     <HBox GridPane.rowIndex="0" GridPane.columnIndex="0">
         <Label prefHeight="60" prefWidth="140" text="Epsilon to compare:"/>
         <TextField fx:id="epsilonToCompareData" prefHeight="40" prefWidth="140"/>
     </HBox>
     <HBox GridPane.rowIndex="1" GridPane.columnIndex="0">
         <Separator prefWidth="230" prefHeight="40" opacity="0"/>
-        <!-- controller will create inside MainSceneController -->
         <Button prefHeight="30" prefWidth="40"
                 text="Set"
                 onAction="#setEPS"/>

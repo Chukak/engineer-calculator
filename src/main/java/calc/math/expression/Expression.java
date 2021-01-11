@@ -355,8 +355,8 @@ NextNumberObject getNextNumber(
 	}
 
 	// check if string is allowed in expression
-	if(hasAlphabetic && Arrays.stream(ALLOWED_STRINGS)
-														.noneMatch(x -> x.equals(numberBuilder.toString()))) {
+	if(hasAlphabetic  // comment for ignore break line
+			&& Arrays.stream(ALLOWED_STRINGS).noneMatch(x -> x.equals(numberBuilder.toString()))) {
 		throw new InvalidStringInExpression(numberBuilder.toString());
 	}
 
