@@ -234,10 +234,21 @@ void insertOrAppend(String text)
 	}
 }
 
+/**
+ * Displays the help on screen as new scene.
+ */
 @FXML
 private
 void showHelp()
 {
+	try {
+		Stage stage = new Stage();
+		stage.setTitle("Help");
+		stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/help.fxml"))));
+		stage.show();
+	} catch(Exception e) {
+		Logging.warning(this, "Handled exception: " + e.getMessage());
+	}
 }
 
 /**

@@ -28,6 +28,11 @@
             <artifactId>javafx-fxml</artifactId>
             <version>15.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>15.0.1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -44,8 +49,8 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>**/*.fxml</include>
-                    <include>**/*.css</include>
+                    <include>view/*.fxml</include>
+                    <include>html/*.html</include>
                 </includes>
             </resource>
         </resources>

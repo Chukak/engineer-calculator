@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.web.WebView?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml"
+          fx:controller="calc.math.gui.controllers.HelpSceneController"
+          prefHeight="600" prefWidth="810" styleClass="root">
+    <ScrollPane GridPane.rowIndex="0" GridPane.columnIndex="0"
+                prefHeight="600" prefWidth="310">
+        <ListView fx:id="listCategories" onMouseClicked="#handleCategory"
+                  prefWidth="310" prefHeight="600"/>
+    </ScrollPane>
+    <ScrollPane GridPane.rowIndex="0" GridPane.columnIndex="1"
+                prefHeight="600" prefWidth="500">
+        <WebView fx:id="textArea" prefWidth="810"/>
+    </ScrollPane>
+</GridPane>
