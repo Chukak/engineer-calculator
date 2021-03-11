@@ -1,16 +1,20 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>calc.math</groupId>
-    <artifactId>calc.math</artifactId>
+    <groupId>engineer-calculator</groupId>
+    <artifactId>engineer-calculator</artifactId>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <name>calc.math</name>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>engineer-calculator</name>
     <url>http://maven.apache.org</url>
+    <scm>
+        <connection>scm:git:ssh://git@github.com/Chukak/engineer-calculator.git</connection>
+        <url>https://github.com/Chukak/engineer-calculator</url>
+      <tag>engineer-calculator-1.0.0</tag>
+  </scm>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -44,6 +48,23 @@
                     <mainClass>calc.math.Main</mainClass>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <checkModificationExcludes>
+                        <checkModificationExclude>pom.xml</checkModificationExclude>
+                    </checkModificationExcludes>
+                    <tagBase>git://github.com/Chukak/engineer-calculator</tagBase>
+                    <branchBase>git://github.com/Chukak/engineer-calculator/tree/main</branchBase>
+                    <preparationGoals>
+                        clean install
+                    </preparationGoals>
+                    <goals>
+                        deploy
+                    </goals>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -55,4 +76,11 @@
             </resource>
         </resources>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Chukak Maven Packages</name>
+            <url>https://maven.pkg.github.com/Chukak/engineer-calculator</url>
+        </repository>
+    </distributionManagement>
 </project>
