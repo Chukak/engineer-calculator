@@ -13,7 +13,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/Chukak/engineer-calculator.git</connection>
         <url>https://github.com/Chukak/engineer-calculator</url>
-      <tag>engineer-calculator-1.0.0</tag>
+      <tag>engineer-calculator-1.0.1</tag>
   </scm>
     <dependencies>
         <dependency>
